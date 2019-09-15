@@ -1,0 +1,12 @@
+# Import relevant libraries
+import numpy as np
+from Orange.data import Table
+import statsmodels.api as sm
+import pylab
+
+# Import data
+data = in_data.copy()
+
+# To get qqplot using stats models, be sure to wrap in np.array(data[])
+sm.qqplot(np.array(data[:,2]), line='45')
+pylab.show()
