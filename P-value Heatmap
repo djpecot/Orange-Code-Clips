@@ -1,0 +1,33 @@
+import numpy as np
+from Orange.data import Table
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+import statsmodels.formula.api as sm
+data = in_data.copy()
+
+# Use this to look inside the data and get column names
+for name in data.domain:
+    print(name)
+    
+# Converts to pandas!!!
+df = Orange.data.pandas_compat.table_to_frame(data)
+rho = df.corr(method = 'pearson')
+    
+pval = rho.copy()
+for i in range(df.shape[1]): # rows are the number of rows in the matrix.
+    for j in range(df.shape[1]):
+        try:
+            y = df.columns[i]
+            x = df.columns[j]
+            df_ols = sm.ols(formula = 'Q("{}") ~ Q("{}")'.format(y,x), data = df).fit()
+            pval.iloc[i,j]  = df_ols.pvalues[1]
+        except ValueError:
+            pval.iloc[i,j]  = None
+pval
+sns.heatmap(pval,
+            center = 0,
+            cmap="Blues",
+            annot = True)
+            
+plt.show()
